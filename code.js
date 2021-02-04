@@ -23,7 +23,8 @@
 	operator[1] = document.getElementById("x");
 	operator[2] = document.getElementById("-");
 	operator[3] = document.getElementById("+");
-	operator[4] = document.getElementById(".");
+
+	decimal = document.getElementById(".");
 
 	let clear = document.getElementById("clear");
 	let del = document.getElementById("delete");
@@ -36,7 +37,13 @@
 
 	for (let i = 0; i < numbers.length; i++) {
 		numbers[i].addEventListener('click', function () {
-			if (operSelection === 0) {
+			if (operSelection === 0 || equalsClicked == true) {
+				if (history == undefined) {
+					output.innerHTML == "";
+				}
+				else {
+					output.innerHTML = history + " = " + total;
+				}
 				valueOne.push(i);
 				console.log(valueOne);
 				input.innerHTML = valueOne.join("");
@@ -47,7 +54,7 @@
 			else if (operSelection != 0) {
 				valueTwo.push(i);
 				console.log(valueTwo);
-				output.innerHTML = valueOne.join("") + operSelection;
+				output.innerHTML = valueOne.join("") + " " + operSelection;
 				input.innerHTML = valueTwo.join("");
 			}
 		});
@@ -68,9 +75,6 @@
 				case 3:
 				operSelection = "+";
 				break;
-				case 4:
-				operSelection = ".";
-				break;
 			}
 			input.innerHTML = operSelection;
 			output.innerHTML = valueOne.join("");
@@ -78,13 +82,26 @@
 		});
 	}
 
+	let equalsClicked = false;
+	let history;
+
 	equals.addEventListener('click', function () {
 		if (operSelection == "&#247") {
 			total = Number(valueOne.join("")) / Number(valueTwo.join(""));
-			input.innerHTML = total;
-			output.innerHTML = valueOne.join("") + " " + operSelection + " " + valueTwo.join("");
-			console.log(total);
 		}
+		else if (operSelection == "*") {
+			total = Number(valueOne.join("")) * Number(valueTwo.join(""));
+		}
+		else if (operSelection == "-") {
+			total = Number(valueOne.join("")) - Number(valueTwo.join(""));
+		}
+		else if (operSelection == "+") {
+			total = Number(valueOne.join("")) + Number(valueTwo.join(""));
+		}
+		input.innerHTML = total;
+		history = valueOne.join("") + " " + operSelection + " " + valueTwo.join("");
+		output.innerHTML = history;
+		equalsClicked = true;
 		 
 	});
 
