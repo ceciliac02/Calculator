@@ -30,21 +30,27 @@
 	let equals = document.getElementById("equals");
 
 	let valueOne = [];
-	let operSelection;
+	var operSelection = 0;
 	let valueTwo = [];
-	var stepOne = true;
+	let total;
 
-	if (stepOne == true) {
-		for (let i = 0; i < numbers.length; i++) {
-			numbers[i].addEventListener('click', function () {
+	for (let i = 0; i < numbers.length; i++) {
+		numbers[i].addEventListener('click', function () {
+			if (operSelection === 0) {
 				valueOne.push(i);
 				console.log(valueOne);
 				input.innerHTML = valueOne.join("");
 				if (valueOne[0] == 0) {
 					valueOne.pop();
 				}
-			});
-		}
+			}
+			else if (operSelection != 0) {
+				valueTwo.push(i);
+				console.log(valueTwo);
+				output.innerHTML = valueOne.join("") + operSelection;
+				input.innerHTML = valueTwo.join("");
+			}
+		});
 	}
 
 	for (let i = 0; i < operator.length; i++) {
@@ -70,12 +76,18 @@
 			output.innerHTML = valueOne.join("");
 			console.log(operSelection);
 		});
-		stepOne = false;
 	}
 
-	if (stepOne == false) {
-		console.log("It worked");
-	}
+	equals.addEventListener('click', function () {
+		if (operSelection == "&#247") {
+			total = Number(valueOne.join("")) / Number(valueTwo.join(""));
+			input.innerHTML = total;
+			output.innerHTML = valueOne.join("") + " " + operSelection + " " + valueTwo.join("");
+			console.log(total);
+		}
+		 
+	});
+
 
 
 
