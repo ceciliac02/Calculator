@@ -1,0 +1,58 @@
+﻿body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(to right, rgb(47 137 253), rgb(25 212 164));
+    margin: 0;
+}
+
+#container {
+    padding: 10px;
+    display: grid;
+}
+
+#outputFields {
+    background-color: rgba(0, 0, 0, .50);
+    padding: 20px;
+    text-align: right;
+    color: white;
+    height: 5vh;
+}
+
+#input {
+    font-size: 40px;
+}
+
+#bodyOfCalculator {
+    display: grid;
+    grid-template-columns: repeat(4, 100px);
+    grid-template-rows: repeat(5, auto);
+    border-radius: 10px;
+}
+
+.button {
+    background: rgba( 255, 255, 255, .25);
+    border: 2px black solid;
+    border-radius: 10px;
+    text-align: center;
+    padding: 10px;
+    font-size: 40px;
+}
+
+.button:hover {
+    background-color: rgba(255, 255, 255, .50);
+}
+
+
+#clear {
+    grid-column: span 2;
+}
+
+#delete {
+    font-size: 35px;
+}
+
+#equals {
+    grid-column: span 2;
+}
