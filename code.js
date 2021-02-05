@@ -26,18 +26,109 @@
 
 	decimal = document.getElementById(".");
 
-	let clear = document.getElementById("clear");
-	let del = document.getElementById("delete");
-	let equals = document.getElementById("equals");
+	const clear = document.getElementById("clear");
+	const del = document.getElementById("delete");
+	const equals = document.getElementById("equals");
 
 	let valueOne = [];
-	var operSelection = 0;
 	let valueTwo = [];
-	let total;
+	let valueThree = [];
+	let currentValue = [];
+	let valuePlaceholder = 0;
+	let history;
+	var valueHTML;
+
+	clear.addEventListener('click', function clearAll () {
+		input.innerHTML = "";
+		output.innerHTML = "";
+		valueOne = [];
+		valueTwo = [];
+		valueThree = [];
+		console.log("clear complete");
+	});
+
+	del.addEventListener('click', function del () {
+		if (currentValue[0].length > 0) {
+			currentValue[0].pop();
+			console.log(currentValue[0]);
+		}
+	});
+
+	function value (valuePlaceholder) {
+		if (valuePlaceholder == 0) {
+			currentValue = valueOne;
+			if (valueOne.length >= 1) {
+				history += valueOne;
+				valueOne = [];
+			}
+		}
+		else if (valuePlaceholder == 1) {
+			currentValue = valueTwo;
+			if (valueTwo.length >= 1) {
+				history += valueTwo;
+				valueTwo = [];
+			}
+		}
+		else {
+			currentValue = valueThree;
+			if (valueThree.length >= 1) {
+				history += valueThree;
+				valueThree = [];
+			}
+		}
+	}
+
+	i = 0;
+	function changeValue (i) {
+		value(i);
+		console.log(i);
+		console.log(currentValue);
+	}
 
 	for (let i = 0; i < numbers.length; i++) {
 		numbers[i].addEventListener('click', function () {
-			if (operSelection === 0 || equalsClicked == true) {
+			currentValue.push(i);
+			console.log(currentValue);
+			valueHTML = currentValue.join("");
+			input.innerHTML = valueHTML;
+		});
+	}
+
+	let j = 0;
+	for (let i = 0; i < operator.length; i++) {
+		operator[i].addEventListener('click', function () {
+			switch (i) {
+				case 0:
+				operSelection = "&#247";
+				break;
+				case 1:
+				operSelection = "*";
+				break;
+				case 2:
+				operSelection = "-";
+				break;
+				case 3:
+				operSelection = "+";
+				break;
+			}
+			input.innerHTML = operSelection;
+			output.innerHTML = valueHTML;
+			changeValue(j++);
+			console.log(currentValue);
+		});
+	}
+
+
+
+	/*let valueOne = [];
+	var operSelection = 0;
+	let valueTwo = [];
+	let total;
+	let equalsClicked = false;
+
+	for (let i = 0; i < numbers.length; i++) {
+		numbers[i].addEventListener('click', function () {
+			if (equalsClicked == true) {
 				if (history == undefined) {
 					output.innerHTML == "";
 				}
@@ -50,8 +141,9 @@
 				if (valueOne[0] == 0) {
 					valueOne.pop();
 				}
+				equalsClicked = false;
 			}
-			else if (operSelection != 0) {
+			else if (operSelection != 0 && equalsClicked == false) {
 				valueTwo.push(i);
 				console.log(valueTwo);
 				output.innerHTML = valueOne.join("") + " " + operSelection;
@@ -82,7 +174,6 @@
 		});
 	}
 
-	let equalsClicked = false;
 	let history;
 
 	equals.addEventListener('click', function () {
@@ -101,9 +192,12 @@
 		input.innerHTML = total;
 		history = valueOne.join("") + " " + operSelection + " " + valueTwo.join("");
 		output.innerHTML = history;
+		valueOne = [];
+		valueTwo = [];
 		equalsClicked = true;
+		operSelection = 0;
 		 
-	});
+	});*/
 
 
 
