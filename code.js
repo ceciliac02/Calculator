@@ -36,8 +36,10 @@
 	let currentValue = [valueOne];
 	let valuePlaceholder = 0;
 	let operSelection;
-	let history;
+	let historyHTML;
+	let history = 0;
 	var valueHTML;
+	var total;
 
 	clear.addEventListener('click', function clearAll () {
 		input.innerHTML = "";
@@ -46,7 +48,7 @@
 		valueOne = [];
 		valueTwo = [];
 		valueThree = [];
-		history = "";
+		historyHTML = "";
 		operSelection = undefined;
 	});
 
@@ -94,7 +96,8 @@
 			valueHTML = currentValue.join("");
 			input.innerHTML = valueHTML;
 			if (operSelection != undefined) {
-				output.innerHTML = history + " " + operSelection;
+				output.innerHTML = historyHTML + " " + operSelection;
+				history += currentValue;
 			}
 		});
 	}
@@ -117,8 +120,9 @@
 				break;
 			}
 			input.innerHTML = operSelection;
-			history = valueHTML;
-			output.innerHTML = history;
+			history += currentValue;
+			historyHTML = valueHTML;
+			output.innerHTML = historyHTML;
 			if (j > 2) { j = 0 };
 			value(j++);
 			console.log(currentValue);
@@ -126,7 +130,12 @@
 	}
 
 	equals.addEventListener('click', function () {
-		
+		if (operSelection == "&#247") {
+			total = parseFloat(historyHTML) / parseFloat(valueHTML);
+			console.log(operSelection);
+		}
+		input.innerHTML = total;
+		console.log(parseInt(historyHTML) + "///" + history + "///" + parseInt(valueHTML) + "///");
 	});
 
 
