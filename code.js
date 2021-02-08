@@ -33,68 +33,73 @@
 	let valueOne = [];
 	let valueTwo = [];
 	let valueThree = [];
-	let currentValue = [];
+	let currentValue = [valueOne];
 	let valuePlaceholder = 0;
+	let operSelection;
 	let history;
 	var valueHTML;
 
 	clear.addEventListener('click', function clearAll () {
 		input.innerHTML = "";
 		output.innerHTML = "";
+		currentValue = [];
 		valueOne = [];
 		valueTwo = [];
 		valueThree = [];
-		console.log("clear complete");
+		history = "";
+		operSelection = undefined;
 	});
 
-	del.addEventListener('click', function del () {
-		if (currentValue[0].length > 0) {
-			currentValue[0].pop();
+	del.addEventListener('click', function () {
+		if (currentValue.length > 0) {
+			currentValue.pop();
+			input.innerHTML = currentValue.join("");
 			console.log(currentValue[0]);
 		}
 	});
 
 	function value (valuePlaceholder) {
 		if (valuePlaceholder == 0) {
-			currentValue = valueOne;
-			if (valueOne.length >= 1) {
+			if (valueOne.length > 0) {
 				history += valueOne;
 				valueOne = [];
 			}
+			currentValue = valueOne;
 		}
 		else if (valuePlaceholder == 1) {
-			currentValue = valueTwo;
 			if (valueTwo.length >= 1) {
 				history += valueTwo;
 				valueTwo = [];
 			}
+			currentValue = valueTwo;
 		}
-		else {
-			currentValue = valueThree;
+		else if (valuePlaceholder == 2) {
 			if (valueThree.length >= 1) {
 				history += valueThree;
 				valueThree = [];
 			}
+			currentValue = valueThree;
 		}
-	}
-
-	i = 0;
-	function changeValue (i) {
-		value(i);
-		console.log(i);
-		console.log(currentValue);
+		console.log ("history = " + history);
+		console.log("value placeholder " + valuePlaceholder);
 	}
 
 	for (let i = 0; i < numbers.length; i++) {
 		numbers[i].addEventListener('click', function () {
+			if (currentValue[0] == 0) {
+				currentValue.pop();
+			}
 			currentValue.push(i);
 			console.log(currentValue);
 			valueHTML = currentValue.join("");
 			input.innerHTML = valueHTML;
+			if (operSelection != undefined) {
+				output.innerHTML = history + " " + operSelection;
+			}
 		});
 	}
 
-	let j = 0;
+	j = 0;
 	for (let i = 0; i < operator.length; i++) {
 		operator[i].addEventListener('click', function () {
 			switch (i) {
@@ -112,11 +117,20 @@
 				break;
 			}
 			input.innerHTML = operSelection;
-			output.innerHTML = valueHTML;
-			changeValue(j++);
+			history = valueHTML;
+			output.innerHTML = history;
+			if (j > 2) { j = 0 };
+			value(j++);
 			console.log(currentValue);
 		});
 	}
+
+	equals.addEventListener('click', function () {
+		
+	});
+
+
+
 
 
 
