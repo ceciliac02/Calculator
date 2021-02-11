@@ -3,7 +3,7 @@
 	let output = document.getElementById("history");
 	let buttons = document.getElementsByClassName("button");
 
-	input.innerHTML = "0";
+	input.innerHTML = "";
 
 	const numbers = [];
 	const operator = [];
@@ -24,12 +24,85 @@
 	operator[2] = document.getElementById("-");
 	operator[3] = document.getElementById("+");
 
-	decimal = document.getElementById(".");
+	const decimal = document.getElementById(".");
 
 	const clear = document.getElementById("clear");
 	const del = document.getElementById("delete");
 	const equals = document.getElementById("equals");
 
+	let firstOperand = [];
+	let secondOperand = [];
+	let operatorSelection = undefined;
+	let operatorSelected = false;
+	let total;
+
+	function displayInput (userInput, userHistory) {
+		input.innerHTML = userInput;
+		output.innerHTML = userHistory;
+	}
+
+	clear.addEventListener('click', function () {
+		displayInput(0, 0)
+		firstOperand = [];
+		secondOperand = [];
+		total = 0;
+		operatorSelection = undefined;
+		operatorSelected = false;
+	});
+
+	del.addEventListener('click', function () {
+		if (operatorSelected == false) {
+			firstOperand.pop();
+			displayInput(firstOperand.join(""), 0);
+		}
+		else {
+			secondOperand.pop();
+		}
+	});
+
+	for (let i = 0; i < operator.length; i++) {
+		operator[i].addEventListener('click', function() {
+			switch (i) {
+				case 0:
+				operatorSelection = "&#247";
+				break;
+				case 1:
+				operatorSelection = "*";
+				break;
+				case 2:
+				operatorSelection = "-";
+				break;
+				case 3: 
+				operatorSelection = "+";
+				break;
+			}
+			displayInput(operatorSelection, firstOperand.join(""));
+			operatorSelected = true;
+		});
+	}
+
+	decimal.addEventListener('click', function () {
+		if (operatorSelected == false && firstOperand.includes(".") == false) {
+			firstOperand.push(".");
+			displayInput(firstOperand.join(""), 0);
+		}
+	});
+
+	for (let i = 0; i < numbers.length; i++) {
+		numbers[i].addEventListener('click', function () {
+			if (operatorSelected == false) {
+				firstOperand.push(i);
+				displayInput(firstOperand.join(""), 0, undefined);
+				console.log(firstOperand);
+			}
+			else {
+				secondOperand.push(i);
+				displayInput(secondOperand.join(""), firstOperand.join("") + " " + operatorSelection);
+			}
+		});
+	}
+
+	/*
 	let valueOne = [];
 	let valueTwo = [];
 	let valueThree = [];
@@ -40,7 +113,8 @@
 	let history = 0;
 	var valueHTML;
 	var total;
-
+	
+	//Clear
 	clear.addEventListener('click', function clearAll () {
 		input.innerHTML = "";
 		output.innerHTML = "";
@@ -52,6 +126,7 @@
 		operSelection = undefined;
 	});
 
+	//Delete
 	del.addEventListener('click', function () {
 		if (currentValue.length > 0) {
 			currentValue.pop();
@@ -60,6 +135,14 @@
 		}
 	});
 
+	decimal.addEventListener('click', function () {
+		if (currentValue.includes(".") == false) {
+			currentValue += ".";
+			input.innerHTML = "";
+		}
+	});
+
+	//changes the current value array and appends it to the history
 	function value (valuePlaceholder) {
 		if (valuePlaceholder == 0) {
 			if (valueOne.length > 0) {
@@ -86,6 +169,7 @@
 		console.log("value placeholder " + valuePlaceholder);
 	}
 
+	//Number buttons are clicked and added to the current value array
 	for (let i = 0; i < numbers.length; i++) {
 		numbers[i].addEventListener('click', function () {
 			if (currentValue[0] == 0) {
@@ -96,13 +180,17 @@
 			valueHTML = currentValue.join("");
 			input.innerHTML = valueHTML;
 			if (operSelection != undefined) {
-				output.innerHTML = historyHTML + " " + operSelection;
+				output.innerHTML += " " + historyHTML + " ";
 				history += currentValue;
+				total = equalsFunction(historyHTML, valueHTML, operSelection)
+				console.log(total);
 			}
 		});
 	}
 
+	//Changes the valuePlaceholder in the value function
 	j = 0;
+	//Defines the operator
 	for (let i = 0; i < operator.length; i++) {
 		operator[i].addEventListener('click', function () {
 			switch (i) {
@@ -122,107 +210,46 @@
 			input.innerHTML = operSelection;
 			history += currentValue;
 			historyHTML = valueHTML;
-			output.innerHTML = historyHTML;
+			output.innerHTML += operSelection;
 			if (j > 2) { j = 0 };
 			value(j++);
 			console.log(currentValue);
 		});
 	}
 
-	equals.addEventListener('click', function () {
+	//Takes the previous input and the current value and executes the expression
+	equals.addEventListener('click', equalsFunction);
+
+	function equalsFunction (firstOperand, secondOperand, operator) {
 		if (operSelection == "&#247") {
 			total = parseFloat(historyHTML) / parseFloat(valueHTML);
 			console.log(operSelection);
 		}
-		input.innerHTML = total;
-		console.log(parseInt(historyHTML) + "///" + history + "///" + parseInt(valueHTML) + "///");
-	});
-
-
-
-
-
-
-	/*let valueOne = [];
-	var operSelection = 0;
-	let valueTwo = [];
-	let total;
-	let equalsClicked = false;
-
-	for (let i = 0; i < numbers.length; i++) {
-		numbers[i].addEventListener('click', function () {
-			if (equalsClicked == true) {
-				if (history == undefined) {
-					output.innerHTML == "";
-				}
-				else {
-					output.innerHTML = history + " = " + total;
-				}
-				valueOne.push(i);
-				console.log(valueOne);
-				input.innerHTML = valueOne.join("");
-				if (valueOne[0] == 0) {
-					valueOne.pop();
-				}
-				equalsClicked = false;
-			}
-			else if (operSelection != 0 && equalsClicked == false) {
-				valueTwo.push(i);
-				console.log(valueTwo);
-				output.innerHTML = valueOne.join("") + " " + operSelection;
-				input.innerHTML = valueTwo.join("");
-			}
-		});
-	}
-
-	for (let i = 0; i < operator.length; i++) {
-		operator[i].addEventListener('click', function () {
-			switch (i) {
-				case 0:
-				operSelection = "&#247";
-				break;
-				case 1:
-				operSelection = "*";
-				break;
-				case 2:
-				operSelection = "-";
-				break;
-				case 3:
-				operSelection = "+";
-				break;
-			}
-			input.innerHTML = operSelection;
-			output.innerHTML = valueOne.join("");
-			console.log(operSelection);
-		});
-	}
-
-	let history;
-
-	equals.addEventListener('click', function () {
-		if (operSelection == "&#247") {
-			total = Number(valueOne.join("")) / Number(valueTwo.join(""));
-		}
 		else if (operSelection == "*") {
-			total = Number(valueOne.join("")) * Number(valueTwo.join(""));
+			total = parseFloat(historyHTML) * parseFloat(valueHTML);
 		}
 		else if (operSelection == "-") {
-			total = Number(valueOne.join("")) - Number(valueTwo.join(""));
+			total = parseFloat(historyHTML) - parseFloat(valueHTML);
 		}
 		else if (operSelection == "+") {
-			total = Number(valueOne.join("")) + Number(valueTwo.join(""));
+			total = parseFloat(historyHTML) + parseFloat(valueHTML);
+		}
+		else {
+			total = "";
+			historyHTML = "";
+			valueHTML = "";
+			operSelection = "";
 		}
 		input.innerHTML = total;
-		history = valueOne.join("") + " " + operSelection + " " + valueTwo.join("");
-		output.innerHTML = history;
-		valueOne = [];
-		valueTwo = [];
-		equalsClicked = true;
-		operSelection = 0;
-		 
-	});*/
+		output.innerHTML = historyHTML + " " + operSelection + " " + valueHTML;
+		console.log(parseInt(historyHTML) + "///" + history + "///" + parseInt(valueHTML) + "///");
+		return total;
+	}*/
 
 
+
+
+	
 
 
 
