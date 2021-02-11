@@ -86,21 +86,49 @@
 			firstOperand.push(".");
 			displayInput(firstOperand.join(""), 0);
 		}
+		else if (operatorSelected == true && secondOperand.includes(".") == false) {
+			secondOperand.push(".");
+			displayInput(secondOperand.join(""), firstOperand.join("") + " " + operatorSelection);
+		}
 	});
 
 	for (let i = 0; i < numbers.length; i++) {
 		numbers[i].addEventListener('click', function () {
 			if (operatorSelected == false) {
+				if (firstOperand[0] == 0) {
+					firstOperand.pop();
+				}
 				firstOperand.push(i);
 				displayInput(firstOperand.join(""), 0, undefined);
 				console.log(firstOperand);
 			}
 			else {
+				if (secondOperand[0] == 0) {
+					secondOperand.pop();
+				}
 				secondOperand.push(i);
 				displayInput(secondOperand.join(""), firstOperand.join("") + " " + operatorSelection);
 			}
 		});
 	}
+
+	equals.addEventListener('click', function () {
+		firstOperand = Number(firstOperand.join(""));
+		secondOperand = Number(secondOperand.join(""))
+		if (operatorSelection == "&#247") {
+			total = firstOperand / secondOperand;
+		}
+		else if (operatorSelection == "*") {
+			total = firstOperand * secondOperand;
+		}
+		else if (operatorSelection == "-") {
+			total = firstOperand - secondOperand;
+		}
+		else if (operatorSelection == "+") {
+			total = firstOperand + secondOperand;
+		}
+		displayInput(total, firstOperand + " " + operatorSelection + " " + secondOperand);
+	});
 
 	/*
 	let valueOne = [];
